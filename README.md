@@ -85,4 +85,3 @@ Lá é possível visualizar e testar todos os endpoints diretamente pelo navegad
 **Kauã**
 Desenvolvedor Backend em formação, com foco em Java e Spring Boot
 
-[LinkedIn](#) · [GitHub](#)
