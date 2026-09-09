@@ -4,8 +4,6 @@ API REST para gerenciamento de finanças pessoais — controle de contas, catego
 
 Projeto desenvolvido como portfólio, aplicando práticas reais de desenvolvimento backend: arquitetura em camadas, autenticação e autorização, testes automatizados, documentação de API e containerização.
 
-## 🎥 Demonstração
-
 ## 🛠️ Tecnologias
 
 - **Java 17** + **Spring Boot** (Spring Web, Spring Data JPA, Spring Security)
@@ -73,12 +71,6 @@ Lá é possível visualizar e testar todos os endpoints diretamente pelo navegad
 ```bash
 ./mvnw test
 ```
-
-## 📌 Próximos passos
-
-- Deploy em nuvem (Render + Aiven MySQL)
-- Testes de integração com banco real (Testcontainers)
-- CI/CD com GitHub Actions
 
 ## 👤 Autor
 
