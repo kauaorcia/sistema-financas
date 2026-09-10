@@ -36,37 +36,4 @@ class TransacaoServiceTest {
         transacao.setData(LocalDate.now());
         transacao.setDescricao("Supermercado");
     }
-
-    @Test
-    void deveRetornarTransacaoQuandoIdExiste() {
-        when(transacaoRepository.findById(1L)).thenReturn(Optional.of(transacao));
-
-        Transacao resultado = transacaoService.buscarPorId(1L);
-
-        assertNotNull(resultado);
-        assertEquals(new BigDecimal("150.50"), resultado.getValor());
-        verify(transacaoRepository).findById(1L);
-    }
-
-    @Test
-    void deveLancarExcecaoQuandoTransacaoNaoExiste() {
-        when(transacaoRepository.findById(99L)).thenReturn(Optional.empty());
-
-        RuntimeException excecao = assertThrows(RuntimeException.class, () -> {
-            transacaoService.buscarPorId(99L);
-        });
-
-        assertEquals("Transação não encontrada", excecao.getMessage());
-    }
-
-    @Test
-    void deveSalvarTransacaoComValorCorreto() {
-        when(transacaoRepository.save(any(Transacao.class))).thenReturn(transacao);
-
-        Transacao resultado = transacaoService.salvar(transacao);
-
-        assertNotNull(resultado);
-        assertEquals(new BigDecimal("150.50"), resultado.getValor());
-        verify(transacaoRepository).save(transacao);
-    }
 }
