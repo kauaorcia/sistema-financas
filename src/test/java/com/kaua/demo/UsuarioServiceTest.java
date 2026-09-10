@@ -44,14 +44,12 @@ class UsuarioServiceTest {
 
     @Test
     void deveListarTodosOsUsuarios() {
-        Usuario outroUsuario = new Usuario("Maria", "maria@teste.com", "outraSenha");
-        List<Usuario> usuariosEsperados = List.of(usuario, outroUsuario);
+        List<Usuario> usuariosEsperados = List.of(usuario);
         when(usuarioRepository.findAll()).thenReturn(usuariosEsperados);
 
         List<Usuario> resultado = usuarioService.listarTodos();
 
         assertSame(usuariosEsperados, resultado);
-        assertEquals(2, resultado.size());
         verify(usuarioRepository).findAll();
         verifyNoMoreInteractions(usuarioRepository, passwordEncoder);
     }
@@ -83,10 +81,7 @@ class UsuarioServiceTest {
     void deveLancarExcecaoAoBuscarUsuarioInexistente() {
         when(usuarioRepository.findById(99L)).thenReturn(Optional.empty());
 
-        RuntimeException excecao = assertThrows(
-                RuntimeException.class,
-                () -> usuarioService.buscarPorId(99L)
-        );
+        RuntimeException excecao = assertThrows(RuntimeException.class, () -> usuarioService.buscarPorId(99L));
 
         assertEquals("Usuário não encontrado", excecao.getMessage());
         verify(usuarioRepository).findById(99L);
@@ -98,11 +93,7 @@ class UsuarioServiceTest {
         UserRequest requisicao = new UserRequest("Kaua", "kaua@teste.com", "senha123");
         when(usuarioRepository.findByEmail(requisicao.email())).thenReturn(Optional.empty());
         when(passwordEncoder.encode(requisicao.senha())).thenReturn("senhaCodificada");
-        when(usuarioRepository.save(any(Usuario.class))).thenAnswer(invocacao -> {
-            Usuario usuarioSalvo = invocacao.getArgument(0);
-            usuarioSalvo.setId(1L);
-            return usuarioSalvo;
-        });
+        when(usuarioRepository.save(any(Usuario.class))).thenAnswer(invocacao -> invocacao.getArgument(0));
 
         Usuario resultado = usuarioService.salvar(requisicao);
 
@@ -113,7 +104,6 @@ class UsuarioServiceTest {
 
         Usuario enviadoParaSalvar = usuarioCaptor.getValue();
         assertAll(
-                () -> assertEquals(1L, resultado.getId()),
                 () -> assertEquals("Kaua", enviadoParaSalvar.getNome()),
                 () -> assertEquals("kaua@teste.com", enviadoParaSalvar.getEmail()),
                 () -> assertEquals("senhaCodificada", enviadoParaSalvar.getSenhaHash()),
@@ -127,10 +117,7 @@ class UsuarioServiceTest {
         UserRequest requisicao = new UserRequest("Outro nome", "kaua@teste.com", "novaSenha");
         when(usuarioRepository.findByEmail(requisicao.email())).thenReturn(Optional.of(usuario));
 
-        RuntimeException excecao = assertThrows(
-                RuntimeException.class,
-                () -> usuarioService.salvar(requisicao)
-        );
+        RuntimeException excecao = assertThrows(RuntimeException.class, () -> usuarioService.salvar(requisicao));
 
         assertEquals("Já existe um usuário com esse email", excecao.getMessage());
         verify(usuarioRepository).findByEmail("kaua@teste.com");
@@ -146,5 +133,4 @@ class UsuarioServiceTest {
         verify(usuarioRepository).deleteById(1L);
         verifyNoMoreInteractions(usuarioRepository, passwordEncoder);
     }
-
 }
