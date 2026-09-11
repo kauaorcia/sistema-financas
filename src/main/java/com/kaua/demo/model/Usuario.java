@@ -29,6 +29,7 @@ public class Usuario implements UserDetails {
         this.senhaHash = senhaHash;
     }
 
+    @JsonIgnore
     @Column(name = "senha_hash", nullable = false)
     private String senhaHash;
 
